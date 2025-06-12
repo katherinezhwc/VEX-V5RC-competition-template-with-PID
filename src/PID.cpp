@@ -43,7 +43,7 @@ void drivePID(double targetInches, double kP = 0.001, double kI = 0, double kD =
     if (power > 100) power = 100;
     if (power < -100) power = -100;
 
-    spinDT(power);
+    spinDT(power*0.5);
 
     task::sleep(20); // small loop delay
   }

@@ -8,22 +8,13 @@ using namespace vex;
 
 
 void rightAuton() {
-
-  //drivePID(24, 0.1, 0, 0.01); 
-  //turnPID(90, 0.3, 0 ,0); 
-  RF.spin(forward, 100, percent);
-  RM.spin(forward, 100, percent);
-  RB.spin(forward, 100, percent);
-  LF.spin(forward, 100, percent);
-  LM.spin(forward, 100, percent);
-  LB.spin(forward, 100, percent);
+  spinDTPosition(100, 28);
+  turnForTime(75, 210);
+  spinDTPosition(100, 23);
 }
 
 void leftAuton() {
-  spinLeftDT(50);
-  turnPID(90, 0.0, 0.001, 0.3);
-  drivePID(6, 0.5, 0.003, 0.3);
-  clamp();
+  drivePID(24, 0.4, 0, 0);
 }
 
 void skillsAuton() {
