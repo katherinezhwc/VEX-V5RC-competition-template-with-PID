@@ -2,10 +2,12 @@
 #include "robot-config.h"
 #include "vex.h"
 #include "functions.h"
+#include "PID.h"
 
 using namespace vex;
 
 
+void drivePID(double targetInches, double kP = 0.7, double kI = 0.7, double kD = 1.8) {
 void drivePID(double targetInches, double kP, double kI, double kD) {
 
   double targetDegrees = inchesToDegrees(targetInches);
@@ -19,7 +21,7 @@ void drivePID(double targetInches, double kP, double kI, double kD) {
   double maxIntegral = 100;
 
 
-  while (fabs(error) > 1.0) { //Keep running until you’re within 1° of your target
+  while (fabs(error) > 4.0) { //Keep running until you’re within 1° of your target
     double leftAvg = (LF.position(degrees) + LM.position(degrees) + LB.position(degrees)) / 3.0;
     double rightAvg = (RF.position(degrees) + RM.position(degrees) + RB.position(degrees)) / 3.0;
     double avgPos = (leftAvg + rightAvg) / 2.0;
@@ -40,6 +42,7 @@ void drivePID(double targetInches, double kP, double kI, double kD) {
     if (power > 100) power = 100;
     if (power < -100) power = -100;
 
+    spinDT(power*0.7);
     spinDT(power*0.5);
 
     task::sleep(20); // small loop delay
@@ -52,6 +55,10 @@ void drivePID(double targetInches, double kP, double kI, double kD) {
 }
 
 //WARNING:kP, kI, and kD values are not correct, need to update yourself
+void turnPID(double targetAngle, double kP = 0.12, double kI = 0.3, double kD = 0.24) {
+  
+  double dir =targetAngle/fabs(targetAngle);
+ 
 void turnPID(double targetAngle, double kP, double kI, double kD) {
 
   double dir = targetAngle/fabs(targetAngle);
@@ -59,14 +66,18 @@ void turnPID(double targetAngle, double kP, double kI, double kD) {
   InertialSensor.setRotation(0, degrees);
 
   // PID state
-  double err   = targetAngle;
+  double err = targetAngle;
   double integ = 0;
   double deriv = 0;
   double last = 0;
   const double maxI = 50.0;
   targetAngle=fabs(targetAngle);
 
+  targetAngle = fabs(targetAngle);
+
+
   // loop til we’re close
+  while (fabs(err) > 3.5) {
   while (fabs(err) > 1.0) {
     err = targetAngle - fabs(InertialSensor.rotation(degrees));
     integ += err;
