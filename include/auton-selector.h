@@ -1,8 +1,6 @@
-#ifndef AUTON_SELECTOR_H
-#define AUTON_SELECTOR_H
+#pragma once
 
 int getSelectedAuton();
 
 void displayAutonSelector();
 
-#endif

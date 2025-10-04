@@ -1,5 +1,4 @@
-#ifndef ROBOT_CONFIG_H
-#define ROBOT_CONFIG_H
+#pragma once
 
 #include "vex.h" //definitions depend on definitions in vex.h
 
@@ -17,6 +16,11 @@ extern vex::motor RB;
 extern vex::motor RM;
 extern vex::motor RF;
 
+extern vex::motor topIntakeMotor;
+extern vex::motor middleIntakeMotor;
+extern vex::motor bottomIntakeMotor;
+
+
 extern vex::motor_group LeftDrive;
 extern vex::motor_group RightDrive;
 
@@ -26,10 +30,13 @@ extern vex::motor Arm1;
 extern vex::motor Arm2;
 
 extern vex::inertial InertialSensor;
+extern vex::optical OpticalSensor;
 
 extern vex::digital_out DoubleActingPiston;
 extern vex::digital_out SingleActingPiston;
 
 void vexcodeInit();
 
-#endif
+
+
+

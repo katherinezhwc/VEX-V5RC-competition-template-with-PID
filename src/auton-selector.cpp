@@ -1,5 +1,7 @@
 #include "vex.h"
+#include "auton-selector.h"
 #include "robot-config.h"
+
 
 int selectedAuton = 0;
 
@@ -10,6 +12,7 @@ using namespace vex;
 
 int getSelectedAuton() {
   return selectedAuton;
+  //make sure to press right aouton//
 }
 
 void displayAutonSelector() {

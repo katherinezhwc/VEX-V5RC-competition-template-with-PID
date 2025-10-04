@@ -61,3 +61,19 @@ void turnForTime( double velocity, double time) {
     stopDT();
 } 
 
+void runIntake(){
+    bottomIntakeMotor.spin(forward, 100, percent);
+    middleIntakeMotor.spin(reverse, 100, percent);
+    topIntakeMotor.spin(forward, 100, percent);
+}
+void runoutake(){
+    bottomIntakeMotor.spin(reverse, 100, percent);
+    middleIntakeMotor.spin(forward, 100, percent);
+    topIntakeMotor.spin(reverse, 100, percent);
+}
+
+void stopIntake(){
+    bottomIntakeMotor.stop();
+    middleIntakeMotor.stop();
+    topIntakeMotor.stop();
+}
