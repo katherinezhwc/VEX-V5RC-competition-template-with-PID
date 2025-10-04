@@ -107,6 +107,8 @@ void usercontrol(void) {
 
     spinLeftDT(leftPower * 0.8);
     spinRightDT(rightPower * 0.8);
+    spinLeftDT(leftPower * 0.7);
+    spinRightDT(rightPower * 0.7);
 
     // ========== ARM CONTROL ========== //
    // if (Controller.ButtonR1.pressing()) {
@@ -178,6 +180,9 @@ void usercontrol(void) {
 
   
   pre_auton();
+  //Competition.test_auton();
+  //Competition.test_driver();
+
 
   while (true) {
     wait(100, msec);

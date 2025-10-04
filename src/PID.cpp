@@ -8,6 +8,7 @@ using namespace vex;
 
 
 void drivePID(double targetInches, double kP = 0.7, double kI = 0.7, double kD = 1.8) {
+void drivePID(double targetInches, double kP, double kI, double kD) {
 
   double targetDegrees = inchesToDegrees(targetInches);
 
@@ -25,9 +26,6 @@ void drivePID(double targetInches, double kP = 0.7, double kI = 0.7, double kD =
     double rightAvg = (RF.position(degrees) + RM.position(degrees) + RB.position(degrees)) / 3.0;
     double avgPos = (leftAvg + rightAvg) / 2.0;
 
-    /*Controller.Screen.clearScreen();
-    Controller.Screen.setCursor(1, 1);
-    Controller.Screen.print(leftAvg);*/
     error = targetDegrees - avgPos;
     integral += error;
 
@@ -45,12 +43,14 @@ void drivePID(double targetInches, double kP = 0.7, double kI = 0.7, double kD =
     if (power < -100) power = -100;
 
     spinDT(power*0.7);
+    spinDT(power*0.5);
 
     task::sleep(20); // small loop delay
   }
 
   stopDT();
-
+  Controller.Screen.print("done");
+  Controller.Screen.print(targetDegrees);
 
 }
 
@@ -59,6 +59,9 @@ void turnPID(double targetAngle, double kP = 0.12, double kI = 0.3, double kD = 
   
   double dir =targetAngle/fabs(targetAngle);
  
+void turnPID(double targetAngle, double kP, double kI, double kD) {
+
+  double dir = targetAngle/fabs(targetAngle);
   // Reset inertial and motor encoders
   InertialSensor.setRotation(0, degrees);
 
@@ -68,18 +71,24 @@ void turnPID(double targetAngle, double kP = 0.12, double kI = 0.3, double kD = 
   double deriv = 0;
   double last = 0;
   const double maxI = 50.0;
+  targetAngle=fabs(targetAngle);
 
   targetAngle = fabs(targetAngle);
 
 
   // loop til we’re close
   while (fabs(err) > 3.5) {
+  while (fabs(err) > 1.0) {
     err = targetAngle - fabs(InertialSensor.rotation(degrees));
     integ += err;
     if (integ >  maxI) integ =  maxI;
     if (integ < -maxI) integ = -maxI;
     deriv = err - last;
     last  = err;
+
+    Controller.Screen.clearScreen();
+    Controller.Screen.setCursor(1, 1);
+    Controller.Screen.print(InertialSensor.rotation(degrees));
 
     double power = kP*err + kI*integ + kD*deriv;
     if (power > 100) power = 100;
@@ -90,6 +99,9 @@ void turnPID(double targetAngle, double kP = 0.12, double kI = 0.3, double kD = 
 
     vex::task::sleep(20);
   }
+
+  Controller.Screen.print("done");
+  Controller.Screen.print(targetAngle);
 
   stopDT();
 
