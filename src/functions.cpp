@@ -4,7 +4,6 @@
 using namespace vex;
 
 double inchesToDegrees(double inches) {
-  return ((inches / (M_PI * 3.25)) * 600);
  return (((inches)/(3.14 * 3.25)) * 360 * (5.0/3.0));
  //NOTE: 5/3 is the gear ratio, adjust as needed
 }
@@ -46,18 +45,6 @@ void spinDT(double velocity) {
     spinRightDT(velocity);
     spinLeftDT(velocity);
 }
-void spinDTPosition(double velocity, double targetInches){
-setDTPosition(0);
-double targetDegrees = inchesToDegrees(targetInches);
-LF.spinToPosition(targetDegrees, degrees, velocity, rpm, false);
-LM.spinToPosition(targetDegrees, degrees, velocity, rpm, false);
-LB.spinToPosition(targetDegrees, degrees, velocity, rpm, false);
-RF.spinToPosition(targetDegrees, degrees, velocity, rpm, false);
-RM.spinToPosition(targetDegrees, degrees, velocity, rpm, false);
-RB.spinToPosition(targetDegrees, degrees, velocity, rpm, true);
-}
-  
-void turnForTime( double velocity, double time) {
 
 
 
@@ -83,24 +70,6 @@ void turnForTime(double velocity, double time) {
     spinLeftDT(velocity);
     wait(time, msec);
     stopDT();
-} 
-
-void runIntake(){
-    bottomIntakeMotor.spin(forward, 100, percent);
-    middleIntakeMotor.spin(reverse, 100, percent);
-    topIntakeMotor.spin(forward, 100, percent);
-}
-void runoutake(){
-    bottomIntakeMotor.spin(reverse, 100, percent);
-    middleIntakeMotor.spin(forward, 100, percent);
-    topIntakeMotor.spin(reverse, 100, percent);
-}
-
-void stopIntake(){
-    bottomIntakeMotor.stop();
-    middleIntakeMotor.stop();
-    topIntakeMotor.stop();
-}
 }
 
 
