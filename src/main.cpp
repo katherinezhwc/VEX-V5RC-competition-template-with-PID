@@ -7,7 +7,6 @@
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
-
 #include "vex.h"
 #include "robot-config.h"
 #include "PID.h"
@@ -86,100 +85,53 @@ void autonomous(void) {
 /*  You must modify the code to add your own robot specific commands here.   */
 /*---------------------------------------------------------------------------*/
 
-bool inauton = false;
-
-// Drive train functions in functions.cpp
-
-
-
-  void checkDoubleClick();
-int main();
-// User control function
 void usercontrol(void) {
-  bool slowModeActive = false;
 
   while (true) {
     // ========== DRIVE CONTROL ========== //
-    double fwd = Controller.Axis3.position(percentUnits::pct);
-    double turn = Controller.Axis1.position(percentUnits::pct);
+    double fwd = Controller.Axis3.position();
+    double turn = Controller.Axis1.position();
+
     double leftPower  = fwd + turn;
     double rightPower = fwd - turn;
 
-    spinLeftDT(leftPower * 0.8);
-    spinRightDT(rightPower * 0.8);
     spinLeftDT(leftPower * 0.7);
     spinRightDT(rightPower * 0.7);
 
     // ========== ARM CONTROL ========== //
-   // if (Controller.ButtonR1.pressing()) {
-     // Arm1.spin(forward, 75, percent);
-     // Arm2.spin(forward, 75, percent);
-    //} else if (Controller.ButtonR2.pressing()) {
-     // Arm1.spin(reverse, 75, percent);
-     // Arm2.spin(reverse, 75, percent);
-    //} else {
-      //Arm1.stop(hold);
-     // Arm2.stop(hold);
-    //}
-
-    // ========== INTAKE ========== //
-    //out put for the intake//
-    if (Controller.ButtonL1.pressing()) {
-    bottomIntakeMotor.spin(forward, 100, percent);
-      middleIntakeMotor.spin(reverse, 100, percent);
-      topIntakeMotor.spin(forward, 100, percent); 
-    wait(20, msec);
-    } 
-   
-      else if (Controller.ButtonL2.pressing()) {
-     bottomIntakeMotor.spin(reverse, 100, percent);
-      middleIntakeMotor.spin(forward, 100, percent);
-      topIntakeMotor.spin(reverse, 100, percent); } 
-  
-      else if (Controller.ButtonR1.pressing()){
-        bottomIntakeMotor.stop();
-        middleIntakeMotor.stop();
-        topIntakeMotor.stop();
-      }
-    }
-
-  
-  
-   
-    
-    // ========== COLOR SENSOR ========== //
-    color detectedColor = OpticalSensor.color();
-    if (detectedColor == color::blue) {
-      Brain.Screen.printAt(50, 50, "Blue Detected!");
-    } else if (detectedColor == color::red) {
-      Brain.Screen.printAt(50, 50, "Red Detected!");
+    if (Controller.ButtonA.pressing()) {
+      Arm1.spin(forward, 75, percent);
+      Arm2.spin(forward, 75, percent);
+    } else if (Controller.ButtonB.pressing()) {
+      Arm1.spin(reverse, 75, percent);
+      Arm2.spin(reverse, 75, percent);
     } else {
-      Brain.Screen.printAt(50, 50, "No specific color detected.");
+      Arm1.stop(hold);
+      Arm2.stop(hold);
     }
 
-    double hue = OpticalSensor.hue();
-    double brightness = OpticalSensor.brightness();
-    Brain.Screen.printAt(50, 70, "Hue: %.2f", hue);
-    Brain.Screen.printAt(50, 90, "Brightness: %.2f", brightness);
-    Brain.Screen.clearScreen();
+    // ========== CLAMP CONTROL ========== //
+    if (Controller.ButtonL1.pressing()) {
+      DoubleActingPiston.set(true);  // close
+    } else if (Controller.ButtonL2.pressing()) {
+      DoubleActingPiston.set(false); // open
+    }
 
-    // ========== LOOP DELAY ========== //
     wait(20, msec);
   }
+}
 
-//void driver controll(){
-//doble forwards = Controller1.Axis2.position();
-//doble turning = Controller1.Axis4}
 
-  
+//
+// Main will set up the competition functions and callbacks.
+//
+int main() {
 
-// Entry point
-       int main() {
+  pre_auton();
+
   Competition.autonomous(autonomous);
   Competition.drivercontrol(usercontrol);
 
-  
-  pre_auton();
   //Competition.test_auton();
   //Competition.test_driver();
 
@@ -188,9 +140,3 @@ void usercontrol(void) {
     wait(100, msec);
   }
 }
-
-
-
-
-
-
